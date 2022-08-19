@@ -1,0 +1,145 @@
+
+- name: Synchronize with repos and update packages
+  dnf:
+      update_only: yes
+      update_cache: yes
+
+- name: Install dnf specific packages
+  dnf:
+      name:
+      - dnf-plugins-core
+      - dnf-utils
+      state: present
+
+- name: Deploy rpm fusion free and nonfree repository gpg keys
+  copy:
+      src: "{{ item }}"
+      dest: /tmp
+  loop:
+  - "RPM-GPG-KEY-rpmfusion-nonfree-fedora-36"
+  - "RPM-GPG-KEY-rpmfusion-free-fedora-36"
+
+- name: Add rpm fusion repository key
+  rpm_key:
+      state: present
+      key: "/tmp/{{ item }}"
+  loop:
+  - "RPM-GPG-KEY-rpmfusion-nonfree-fedora-36"
+  - "RPM-GPG-KEY-rpmfusion-free-fedora-36"
+
+- name: Add rpm fusion free repository key
+  rpm_key:
+      state: present
+      key: https://rpmfusion.org/keys?action=AttachFile&do=get&target=RPM-GPG-KEY-rpmfusion-free-fedora-32
+
+- name: Install rpm fusion repository
+  dnf:
+      name: "https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-{{ ansible_distribution_major_version }}.noarch.rpm"
+      state: present
+      disable_gpg_check: yes
+
+- name: Turn on COPR repository
+  command: dnf copr enable jdoss/slack-repo -y
+
+- name: Install slack-repo repository
+  dnf:
+      name: slack-repo
+      state: present
+
+- name: Import atom repository gpg key
+  rpm_key:
+      state: present
+      key: https://packagecloud.io/AtomEditor/atom/gpgkey
+
+- name: Install atom repository
+  copy:
+      src: atom.repo
+      dest: /etc/yum.repos.d/atom.repo
+
+- name: Import kubernetes repository gpg key
+  rpm_key:
+      state: present
+      key: https://packages.cloud.google.com/yum/doc/yum-key.gpg
+
+- name: Install kubernetes repository
+  copy:
+      src: kubernetes.repo
+      dest: /etc/yum.repos.d/kubernetes.repo
+
+- name: Install hashicorp repository
+  copy:
+      src: hashicorp.repo
+      dest: /etc/yum.repos.d/hashicorp.repo
+
+- name: Install essential packages
+  dnf:
+      name: "{{ workstation_fedora_packages }}"
+      state: present
+
+- name: Generate bash completion script for kubectl
+  shell: kubectl completion bash > /etc/bash_completion.d/kubectl.sh
+  args:
+    creates: /etc/bash_completion.d/kubectl.sh
+
+- name: Run and enable sysstat
+  service:
+      name: sysstat
+      state: started
+      enabled: yes
+
+# - name: Clone dotfiles github repository
+#   git:
+#       repo: https://github.com/woocashb/dotfiles
+#       dest: /opt/dotfiles
+
+- name: Deploy vim configuration for unprivileged user
+  copy:
+      src: /opt/dotfiles/vim/vimrc
+      dest: "/home/{{ workstation_user }}/.vimrc"
+      remote_src: yes
+      owner: "{{ workstation_user }}"
+      group: "{{ workstation_user }}"
+
+- name: Deploy vim configuration for root user
+  copy:
+      src: /opt/dotfiles/vim/vimrc
+      dest: "/root/.vimrc"
+      remote_src: yes
+      owner: root
+      group: root
+
+- name: Deploy vim theme and plugins
+  copy:
+      src: /opt/dotfiles/vim/vim80/
+      dest: "/usr/share/vim/vim90"
+      remote_src: yes
+
+- name: Deploy bash configuration
+  copy:
+      src: /opt/dotfiles/bashrc
+      dest: "/home/{{ workstation_user }}/.bashrc"
+      remote_src: yes
+      owner: "{{ workstation_user }}"
+      group: "{{ workstation_user }}"
+
+- name: Deploy atom configuration
+  copy:
+      src: /opt/dotfiles/atom/
+      dest: "/home/{{ workstation_user }}/.atom"
+      remote_src: yes
+      owner: "{{ workstation_user }}"
+      group: "{{ workstation_user }}"
+
+- name: Deploy tmux configuration
+  copy:
+      src: /opt/dotfiles/tmux/tmux.conf
+      dest: "/home/{{ workstation_user }}/.tmux.conf"
+      remote_src: yes
+      owner: "{{ workstation_user }}"
+      group: "{{ workstation_user }}"
+
+- name: Initialize directory structure of user home directory
+  file:
+      state: directory
+      path: "/home/{{ workstation_user }}/{{ item }}"
+  loop: "{{ workstation_home_subdirs }}"

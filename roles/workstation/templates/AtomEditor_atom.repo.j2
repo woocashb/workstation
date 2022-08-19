@@ -1,0 +1,21 @@
+[AtomEditor_atom]
+name=AtomEditor_atom
+baseurl=https://packagecloud.io/AtomEditor/atom/fedora/{{ ansible_distribution_major_version }}/$basearch
+repo_gpgcheck=0
+gpgcheck=0
+enabled=1
+gpgkey=https://packagecloud.io/AtomEditor/atom/gpgkey
+sslverify=1
+sslcacert=/etc/pki/tls/certs/ca-bundle.crt
+metadata_expire=300
+
+[AtomEditor_atom-source]
+name=AtomEditor_atom-source
+baseurl=https://packagecloud.io/AtomEditor/atom/fedora/{{ ansible_distribution_major_version }}/SRPMS
+repo_gpgcheck=0
+gpgcheck=0
+enabled=1
+gpgkey=https://packagecloud.io/AtomEditor/atom/gpgkey
+sslverify=1
+sslcacert=/etc/pki/tls/certs/ca-bundle.crt
+metadata_expire=300

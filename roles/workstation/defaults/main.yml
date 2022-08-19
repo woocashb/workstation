@@ -1,0 +1,62 @@
+---
+# defaults file for roles/workstation
+
+workstation_user: "lboczkaja"
+
+workstation_fedora_packages:
+- htop
+- iotop
+- tcpdump
+- sysstat
+- strace
+- nmap
+- tmux
+- screen
+- bind-utils
+- openssh-clients
+- openvpn
+- terminus-fonts
+- terminus-fonts-console
+- slack
+- terraform
+- iperf3
+- lshw
+- telnet
+- tcptraceroute
+- ShellCheck
+- chromium
+- keepassxc
+- atom-beta
+- gcc
+- git
+- lsof
+- flameshot
+- dkms
+- vim
+- vagrant
+- VirtualBox
+- thunderbird
+- ansible
+- yamllint
+- iftop
+- nethogs
+- python3-ipython
+- dnsmasq
+- kubernetes-client
+
+workstation_home_subdirs:
+- files/dl
+- files/img
+- files/mp3
+- files/video
+- files/ss
+- files/doc
+- files/tmp
+- virtualbox
+- praca
+- praca/vpn
+- dev
+- dev/vagrant
+- dev/ansible
+- dev/python
+- bin
