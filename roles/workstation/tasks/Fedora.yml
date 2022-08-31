@@ -106,7 +106,7 @@
 
 - name: Clone dotfiles github repository
   git:
-      repo: "https://{{ github_access_token }}.github.com/woocashb/dotfiles"
+      repo: "https://{{ github_access_token }}@github.com/woocashb/dotfiles"
       dest: /opt/dotfiles
 
 - name: Deploy vim configuration for unprivileged user
