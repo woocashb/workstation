@@ -1,3 +1,7 @@
+- name: Deploy dnf config with performance improvement settings
+  copy:
+      src: dnf.conf
+      dest: /etc/dnf/dnf.conf
 
 - name: Synchronize with repos and update packages
   dnf:
@@ -19,18 +23,18 @@
   - "RPM-GPG-KEY-rpmfusion-nonfree-fedora-36"
   - "RPM-GPG-KEY-rpmfusion-free-fedora-36"
 
-- name: Add rpm fusion repository key
-  rpm_key:
-      state: present
-      key: "/tmp/{{ item }}"
-  loop:
-  - "RPM-GPG-KEY-rpmfusion-nonfree-fedora-36"
-  - "RPM-GPG-KEY-rpmfusion-free-fedora-36"
-
-- name: Add rpm fusion free repository key
-  rpm_key:
-      state: present
-      key: https://rpmfusion.org/keys?action=AttachFile&do=get&target=RPM-GPG-KEY-rpmfusion-free-fedora-32
+# - name: Add rpm fusion repository key
+#   rpm_key:
+#       state: present
+#       key: "/tmp/{{ item }}"
+#   loop:
+#   - "RPM-GPG-KEY-rpmfusion-nonfree-fedora-36"
+#   - "RPM-GPG-KEY-rpmfusion-free-fedora-36"
+#
+# - name: Add rpm fusion free repository key
+#   rpm_key:
+#       state: present
+#       key: https://rpmfusion.org/keys?action=AttachFile&do=get&target=RPM-GPG-KEY-rpmfusion-free-fedora-32
 
 - name: Install rpm fusion repository
   dnf:
@@ -55,6 +59,16 @@
   copy:
       src: atom.repo
       dest: /etc/yum.repos.d/atom.repo
+
+- name: Install VirtualBox repository
+  copy:
+      src: vbox.repo
+      dest: /etc/yum.repos.d/vbox.repo
+
+- name: Import VirtualBox repository gpg key
+  rpm_key:
+      state: present
+      key: https://www.virtualbox.org/download/oracle_vbox.asc
 
 - name: Import kubernetes repository gpg key
   rpm_key:
@@ -87,10 +101,13 @@
       state: started
       enabled: yes
 
-# - name: Clone dotfiles github repository
-#   git:
-#       repo: https://github.com/woocashb/dotfiles
-#       dest: /opt/dotfiles
+- name: Read in github access token
+  include_vars: github_access_token.yml
+
+- name: Clone dotfiles github repository
+  git:
+      repo: "https://{{ github_access_token }}.github.com/woocashb/dotfiles"
+      dest: /opt/dotfiles
 
 - name: Deploy vim configuration for unprivileged user
   copy:

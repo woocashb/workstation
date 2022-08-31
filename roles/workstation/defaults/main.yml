@@ -34,7 +34,7 @@ workstation_fedora_packages:
 - dkms
 - vim
 - vagrant
-- VirtualBox
+- VirtualBox-6.1
 - thunderbird
 - ansible
 - yamllint
