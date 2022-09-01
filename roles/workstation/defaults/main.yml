@@ -41,6 +41,7 @@ workstation_fedora_packages:
 - iftop
 - nethogs
 - python3-ipython
+- python3-pip
 - dnsmasq
 - kubernetes-client
 
