@@ -37,16 +37,6 @@
       name: slack-repo
       state: present
 
-- name: Import atom repository gpg key
-  rpm_key:
-      state: present
-      key: https://packagecloud.io/AtomEditor/atom/gpgkey
-
-- name: Install atom repository
-  copy:
-      src: atom.repo
-      dest: /etc/yum.repos.d/atom.repo
-
 - name: Install VirtualBox repository
   copy:
       src: vbox.repo
@@ -122,14 +112,6 @@
   copy:
       src: /opt/dotfiles/bashrc
       dest: "/home/{{ workstation_user }}/.bashrc"
-      remote_src: yes
-      owner: "{{ workstation_user }}"
-      group: "{{ workstation_user }}"
-
-- name: Deploy atom configuration
-  copy:
-      src: /opt/dotfiles/atom/
-      dest: "/home/{{ workstation_user }}/.atom"
       remote_src: yes
       owner: "{{ workstation_user }}"
       group: "{{ workstation_user }}"
