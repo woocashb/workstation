@@ -46,18 +46,18 @@ workstation_fedora_packages:
 - kubernetes-client
 
 workstation_home_subdirs:
-- files/dl
+- dl
 - files/img
 - files/mp3
 - files/video
 - files/ss
 - files/doc
 - files/tmp
-- virtualbox
+- vm
 - praca
-- praca/vpn
 - dev
 - dev/vagrant
 - dev/ansible
 - dev/python
+- dev/git
 - bin

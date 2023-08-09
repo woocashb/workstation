@@ -20,8 +20,8 @@
       src: "{{ item }}"
       dest: /tmp
   loop:
-  - "RPM-GPG-KEY-rpmfusion-nonfree-fedora-36"
-  - "RPM-GPG-KEY-rpmfusion-free-fedora-36"
+  - "RPM-GPG-KEY-rpmfusion-nonfree-fedora-2020"
+  - "RPM-GPG-KEY-rpmfusion-free-fedora-2020"
 
 - name: Install rpm fusion repository
   dnf:
